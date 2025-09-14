@@ -1,0 +1,76 @@
+import requests
+import os
+import networkx as nx
+import matplotlib.pyplot as plt
+
+# ----------------------------
+# CONFIG
+# ----------------------------
+API_KEY = "D2Q73NN4DWQDS2FZMF15S3QITAI1UNMECT"   # Replace with your Etherscan API key
+WALLET_ADDRESS = "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"  # Example wallet (Ethereum Foundation)
+TX_LIMIT = 15
+
+
+# Create results directory if it doesn't exist
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# ----------------------------
+# STEP 1: Fetch transactions
+# ----------------------------
+def get_transactions(address, api_key, limit=20):
+    url = (
+        f"https://api.etherscan.io/api"
+        f"?module=account&action=txlist&address={address}"
+        f"&startblock=0&endblock=99999999&page=1&offset={limit}&sort=desc"
+        f"&apikey={api_key}"
+    )
+    response = requests.get(url)
+    data = response.json()
+
+    if data["status"] != "1":
+        print("Error fetching data:", data.get("message", "Unknown error"))
+        return []
+    
+    return data["result"]
+
+# ----------------------------
+# STEP 2: Build transaction graph
+# ----------------------------
+def build_graph(transactions):
+    G = nx.DiGraph()
+    for tx in transactions:
+        from_addr = tx["from"]
+        to_addr = tx["to"]
+        value = int(tx["value"]) / 10**18  # ETH value
+        G.add_edge(from_addr, to_addr, weight=value)
+    return G
+
+# ----------------------------
+# STEP 3: Plot graph
+# ----------------------------
+def plot_graph(G, wallet_address):
+    plt.figure(figsize=(10, 8))
+    pos = nx.spring_layout(G, k=0.5)
+
+    # Draw nodes
+    node_colors = ["red" if n.lower() == wallet_address.lower() else "skyblue" for n in G.nodes()]
+    nx.draw_networkx_nodes(G, pos, node_size=800, node_color=node_colors)
+
+    # Draw edges
+    nx.draw_networkx_edges(G, pos, arrowstyle="->", arrowsize=15)
+
+    # Labels
+    nx.draw_networkx_labels(G, pos, font_size=8)
+
+    plt.title("Transaction Graph (sample)")
+    plt.axis("off")
+    plt.show()
+
+# ----------------------------
+# MAIN
+# ----------------------------
+if __name__ == "__main__":
+    txs = get_transactions(WALLET_ADDRESS, API_KEY, limit=15)
+    if txs:
+        G = build_graph(txs)
+        plot_graph(G, WALLET_ADDRESS)
