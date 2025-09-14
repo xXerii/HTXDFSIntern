@@ -10,13 +10,13 @@ Fetch recent transactions of any Ethereum wallet
 
 
 ## Installation 
-1. Clone the repo either with GitHub desktop or
+1. Clone the repo either with GitHub desktop or<br>
    git clone https://github.com/xXerii/HTXDFSIntern.git
 
-   cd HTXDFSIntern
-   python -m venv venv
-   source venv/bin/activate # Mac/Linux
-   venv\Scripts\activate # Windows
+   cd HTXDFSIntern<br>
+   python -m venv venv<br>
+   source venv/bin/activate # Mac/Linux<br>
+   venv\Scripts\activate # Windows<br>
 
 2. Intalling dependencies:
    pip install -r requirements.txt
@@ -27,3 +27,7 @@ python src/crypto_graph.py
 This will show a graph with regards to recent transactions for the wallet address
 
 Example: ![Transaction Graph](result/Figure_1.png)
+
+Disclaimer:
+
+Apologies as I only managed to finished task 1.
