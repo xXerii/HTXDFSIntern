@@ -10,10 +10,6 @@ API_KEY = "D2Q73NN4DWQDS2FZMF15S3QITAI1UNMECT"   # Replace with your Etherscan A
 WALLET_ADDRESS = "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"  # Example wallet (Ethereum Foundation)
 TX_LIMIT = 15
 
-
-# Create results directory if it doesn't exist
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
 # ----------------------------
 # STEP 1: Fetch transactions
 # ----------------------------
